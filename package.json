@@ -5,7 +5,15 @@
   "description": "Create an animated terminal boot screen for your GitHub profile README. No install, runs in your browser.",
   "license": "MIT",
   "author": "Germain Deffontaines",
-  "keywords": ["github-profile", "readme", "profile-readme", "terminal", "svg", "animation", "generator"],
+  "keywords": [
+    "github-profile",
+    "readme",
+    "profile-readme",
+    "terminal",
+    "svg",
+    "animation",
+    "generator"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -15,7 +23,8 @@
     "examples": "vite-node scripts/build-examples.ts"
   },
   "dependencies": {
-    "figlet": "^1.8.0"
+    "figlet": "^1.8.0",
+    "gifenc": "^1.0.3"
   },
   "devDependencies": {
     "@types/figlet": "^1.7.0",

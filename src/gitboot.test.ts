@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_CONFIG, decodeConfig, encodeConfig, normalizeConfig } from './config';
-import { buildTimeline } from './engine/timeline';
-import { renderSvg } from './engine/svg';
+import { DEFAULT_CONFIG, THEME_NAMES, decodeConfig, encodeConfig, normalizeConfig } from './config';
+import { buildTimeline, promptText } from './engine/timeline';
+import { renderFrame, renderSvg } from './engine/svg';
 import { buildReadme } from './readme';
 
 describe('config', () => {
@@ -30,6 +30,28 @@ describe('timeline', () => {
     const off = buildTimeline({ ...DEFAULT_CONFIG, progressBar: false, cursor: false });
     expect(off.events.some((e) => e.kind === 'progress')).toBe(false);
     expect(off.cursor).toBeNull();
+  });
+});
+
+describe('themes and frames', () => {
+  it('every theme renders a valid animated SVG and static frame', () => {
+    for (const theme of THEME_NAMES) {
+      const c = { ...DEFAULT_CONFIG, theme };
+      const tl = buildTimeline(c, ['LOGO']);
+      expect(renderSvg(c, tl)).toMatch(/^<svg[\s\S]*<\/svg>$/);
+      expect(renderFrame(c, tl, tl.total - 1)).toMatch(/^<svg[\s\S]*<\/svg>$/);
+    }
+  });
+  it('windows theme uses a PowerShell prompt', () => {
+    expect(promptText({ ...DEFAULT_CONFIG, theme: 'windows', username: 'bob' })).toBe('PS C:\\Users\\bob> ');
+  });
+  it('frames reveal text progressively', () => {
+    const tl = buildTimeline(DEFAULT_CONFIG);
+    const typed = tl.events.find((e) => e.kind === 'type')!;
+    const mid = renderFrame(DEFAULT_CONFIG, tl, typed.start + typed.duration / 2);
+    const end = renderFrame(DEFAULT_CONFIG, tl, typed.start + typed.duration);
+    expect(mid).not.toContain(`>${typed.text}<`);
+    expect(end).toContain(`>${typed.text}<`);
   });
 });
 

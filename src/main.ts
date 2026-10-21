@@ -2,7 +2,9 @@ import './style.css';
 import { THEME_NAMES, decodeConfig, encodeConfig, normalizeConfig, type Config } from './config';
 import { textToAscii } from './ascii';
 import { renderSvg } from './engine/svg';
-import { buildReadme } from './readme';
+import { buildReadme, type ImageFormat } from './readme';
+import { buildTimeline } from './engine/timeline';
+import { exportGif } from './gif';
 
 let config: Config = decodeConfig(location.hash);
 
@@ -32,6 +34,8 @@ app.innerHTML = `
       <div class="actions">
         <button id="copyMd">Copy Markdown</button>
         <button id="dlSvg">Download SVG</button>
+        <button id="dlGif">Download GIF</button>
+        <select id="format" aria-label="Image format used in the Markdown"><option value="svg">Markdown: SVG</option><option value="gif">Markdown: GIF</option></select>
         <button id="copyLink">Copy link</button>
         <span id="status" role="status"></span>
       </div>
@@ -76,11 +80,12 @@ function readForm(): Config {
 }
 
 let colorTouched = false;
+const format = () => document.querySelector<HTMLSelectElement>('#format')!.value as ImageFormat;
 
 function render() {
   speedOut.textContent = String(config.speed);
   preview.innerHTML = renderSvg(config, undefined, textToAscii(config.logoText));
-  mdBox.textContent = buildReadme(config);
+  mdBox.textContent = buildReadme(config, format());
   history.replaceState(null, '', `#${encodeConfig(config)}`);
 }
 
@@ -109,15 +114,34 @@ document.querySelector('#resetColor')!.addEventListener('click', () => {
   config = { ...readForm(), color: '' };
   render();
 });
-document.querySelector('#copyMd')!.addEventListener('click', () => copy(buildReadme(config), 'Markdown copied'));
+document.querySelector('#copyMd')!.addEventListener('click', () => copy(buildReadme(config, format()), 'Markdown copied'));
 document.querySelector('#copyLink')!.addEventListener('click', () => copy(location.href, 'Link copied'));
-document.querySelector('#dlSvg')!.addEventListener('click', () => {
-  const blob = new Blob([renderSvg(config, undefined, textToAscii(config.logoText))], { type: 'image/svg+xml' });
+function download(blob: Blob, name: string) {
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'boot.svg';
+  a.download = name;
   a.click();
   URL.revokeObjectURL(a.href);
+}
+
+document.querySelector('#dlSvg')!.addEventListener('click', () => {
+  download(new Blob([renderSvg(config, undefined, textToAscii(config.logoText))], { type: 'image/svg+xml' }), 'boot.svg');
+});
+
+const gifBtn = document.querySelector<HTMLButtonElement>('#dlGif')!;
+document.querySelector('#format')!.addEventListener('change', render);
+gifBtn.addEventListener('click', async () => {
+  gifBtn.disabled = true;
+  try {
+    const tl = buildTimeline(config, textToAscii(config.logoText));
+    const blob = await exportGif(config, tl, (r) => (statusEl.textContent = `Encoding GIF… ${Math.round(r * 100)}%`));
+    download(blob, 'boot.gif');
+    flash(`GIF ready (${(blob.size / 1024).toFixed(0)} kB)`);
+  } catch (err) {
+    flash(err instanceof Error ? err.message : 'GIF export failed');
+  } finally {
+    gifBtn.disabled = false;
+  }
 });
 
 fillForm(config);

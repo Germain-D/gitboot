@@ -1,4 +1,5 @@
 import type { Config } from '../config';
+import { THEMES } from '../themes';
 
 export type Cls = 'prompt' | 'text' | 'ok' | 'dim' | 'accent';
 
@@ -29,6 +30,7 @@ const HOLD_MS = 3500;
 const MIN_COLS = 56;
 
 export function promptText(config: Config): string {
+  if (THEMES[config.theme].promptStyle === 'windows') return `PS C:\\Users\\${config.username}> `;
   return `${config.username}@${config.hostname}:~$ `;
 }
 

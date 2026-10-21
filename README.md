@@ -18,7 +18,7 @@ Customize it in your browser, copy two lines into your profile README. Nothing t
 ## Why GitBoot?
 
 - **Zero install.** It runs entirely in the browser. No backend, no account, no token.
-- **Animated SVG, not a GIF.** A few kB instead of several MB, crisp at any size, works inside a GitHub README.
+- **Animated SVG first, GIF when you need it.** The SVG is a few kB, crisp at any size and works inside a GitHub README. A GIF export (about 1 MB) is there for places that do not render SVG.
 - **What you see is what you export.** The live preview and the exported file come from the same renderer.
 - **Shareable.** Your whole config lives in the URL. Send a link, get the same boot screen.
 - **Open and hackable.** Small TypeScript codebase, themes are plain objects.
@@ -31,6 +31,14 @@ Customize it in your browser, copy two lines into your profile README. Nothing t
 <td align="center"><b>cyberpunk</b><br><img src="./assets/demo-cyberpunk.svg" width="380" alt="cyberpunk theme"></td>
 </tr>
 <tr>
+<td align="center"><b>retro</b><br><img src="./assets/demo-retro.svg" width="380" alt="retro theme"></td>
+<td align="center"><b>windows</b><br><img src="./assets/demo-windows.svg" width="380" alt="windows theme"></td>
+</tr>
+<tr>
+<td align="center"><b>minimal</b><br><img src="./assets/demo-minimal.svg" width="380" alt="minimal theme"></td>
+<td align="center"><b>dracula</b><br><img src="./assets/demo-dracula.svg" width="380" alt="dracula theme"></td>
+</tr>
+<tr>
 <td align="center"><b>classic</b><br><img src="./assets/demo-classic.svg" width="380" alt="classic theme"></td>
 <td></td>
 </tr>
@@ -39,7 +47,7 @@ Customize it in your browser, copy two lines into your profile README. Nothing t
 ## Use it in 30 seconds
 
 1. Open the generator and tweak the username, logo, messages, theme, speed and effects.
-2. Click **Download SVG** and save it as `assets/boot.svg` in your profile repository (`<you>/<you>`).
+2. Click **Download SVG** (or **Download GIF**) and save it as `assets/boot.svg` (or `boot.gif`) in your profile repository (`<you>/<you>`).
 3. Click **Copy Markdown** and paste it into your `README.md`.
 
 ```html
@@ -74,14 +82,16 @@ Config  ->  Timeline  ->  SVG renderer  ->  boot.svg
 - [`src/config.ts`](src/config.ts): config schema, validation, URL encoding
 - [`src/engine/timeline.ts`](src/engine/timeline.ts): pure function turning a config into timed screen events
 - [`src/engine/svg.ts`](src/engine/svg.ts): turns a timeline into a self-contained animated SVG
+- [`src/gif.ts`](src/gif.ts): rasterizes timeline frames and encodes the GIF
 - [`src/themes/`](src/themes/index.ts): color palettes and effects
 
 ## Roadmap
 
 - [x] Live preview, shareable URL, SVG and Markdown export
 - [x] Themes: classic, matrix, cyberpunk
-- [ ] GIF / WebP export
-- [ ] More themes (retro CRT, Windows, minimal)
+- [x] GIF export
+- [x] More themes: retro CRT, Windows, minimal, dracula
+- [ ] Animated WebP export
 - [ ] Image to ASCII logo
 - [ ] Custom ASCII logo and fonts
 - [ ] "Deploy to GitHub" via OAuth

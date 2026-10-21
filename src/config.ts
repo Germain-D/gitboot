@@ -1,4 +1,4 @@
-export type ThemeName = 'classic' | 'matrix' | 'cyberpunk';
+export type ThemeName = 'classic' | 'matrix' | 'cyberpunk' | 'retro' | 'windows' | 'minimal' | 'dracula';
 
 export interface Config {
   username: string;
@@ -17,7 +17,7 @@ export interface Config {
   color: string;
 }
 
-export const THEME_NAMES: ThemeName[] = ['classic', 'matrix', 'cyberpunk'];
+export const THEME_NAMES: ThemeName[] = ['classic', 'matrix', 'cyberpunk', 'retro', 'windows', 'minimal', 'dracula'];
 
 export const DEFAULT_CONFIG: Config = {
   username: 'germain',

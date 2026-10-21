@@ -2,12 +2,15 @@ import type { Config } from './config';
 
 export const SVG_PATH = 'assets/boot.svg';
 
+export type ImageFormat = 'svg' | 'gif';
+
 /** Markdown for a profile README that embeds the generated boot screen. */
-export function buildReadme(config: Config): string {
+export function buildReadme(config: Config, format: ImageFormat = 'svg'): string {
   const name = config.username || 'there';
+  const imagePath = `assets/boot.${format}`;
   return `<div align="center">
 
-<img src="./${SVG_PATH}" alt="Terminal boot animation for ${name}" width="800">
+<img src="./${imagePath}" alt="Terminal boot animation for ${name}" width="800">
 
 </div>
 

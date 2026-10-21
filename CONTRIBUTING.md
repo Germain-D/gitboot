@@ -13,7 +13,7 @@ npm test
 ## Add a theme (easiest first contribution)
 
 1. Add a name to `ThemeName` and `THEME_NAMES` in [`src/config.ts`](src/config.ts).
-2. Add a palette in [`src/themes/index.ts`](src/themes/index.ts): `bg`, `chrome`, `border`, the five text colors, and the `glow` / `scanlines` flags.
+2. Add a palette in [`src/themes/index.ts`](src/themes/index.ts): `bg`, `chrome`, `border`, the five text colors, `glow` / `scanlines`, `chromeStyle` and `promptStyle`.
 3. Run `npm run examples` and add the new demo to the README theme table.
 4. Check it in the browser, including with `prefers-reduced-motion` enabled.
 
