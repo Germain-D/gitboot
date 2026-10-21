@@ -59,7 +59,7 @@ Customize it in your browser, copy two lines into your profile README. Nothing t
 ## Run it locally
 
 ```bash
-git clone https://github.com/<owner>/gitboot.git
+git clone https://github.com/Germain-D/gitboot.git
 cd gitboot
 npm install
 npm run dev
